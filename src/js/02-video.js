@@ -1,11 +1,18 @@
 
 import Player from '@vimeo/player';
+import throttle from 'lodash.throttle'
 
-const player = new Player('handstick', {
-    id: 19231868,
-    width: 640
-});
+const iframe = document.querySelector('#vimeo-player');
 
-player.on('play', function() {
-    console.log('played the video!');
-});
+const player = new Player(iframe);
+
+
+
+const onPlay = function(data) {
+    console.log(data.seconds);
+    localStorage.setItem('secs', data.seconds);
+    console.log(localStorage.getItem('secs'));
+ };
+
+ player.on('timeupdate', throttle(onPlay, 1000));
+
