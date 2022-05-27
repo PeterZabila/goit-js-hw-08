@@ -9,11 +9,11 @@ const refs = {
     textArea: document.querySelector('textarea'),
 };
 
-const formInputHandle = function(e) {
+const formInputHandle = function() {
     formData.email = refs.input.value;
     formData.message = refs.textArea.value;
-    const formDataforForLS = JSON.stringify(formData);
-    localStorage.setItem(STORAGE_KEY, formDataforForLS);
+        const formDataForLS = JSON.stringify(formData);
+    localStorage.setItem(STORAGE_KEY, formDataForLS);
     console.log(formData); 
 };
 
@@ -24,17 +24,20 @@ const formSubmitHandle = function(e) {
     localStorage.removeItem(STORAGE_KEY);
 };
 
+const getSavedValue = function() {
+    if(localStorage.getItem(STORAGE_KEY)) {
+        const one = localStorage.getItem(STORAGE_KEY);
+        const two = JSON.parse(one);
+        console.log(two);
+        refs.input.value = two.email;
+        refs.textArea.value = two.message;
+    } else {
+        refs.input.value = "";
+        refs.textArea.value = "";
+    }
+}; 
+
+
+window.addEventListener('load', getSavedValue);
 refs.form.addEventListener('input', throttle(formInputHandle, 500));
 refs.form.addEventListener('submit', formSubmitHandle);
-
-// const onRefresh = function(e) {
-//     if(localStorage.getItem(STORAGE_KEY)) {
-//         const rawData = localStorage.getItem(STORAGE_KEY);
-//         const parsedJson = JSON.parse(rawData);
-
-//         refs.input.value = parsedJson.email;
-//         refs.textArea.value = parsedJson.message;
-//     }
-// };
-
-// refs.form.addEventListener('input', onRefresh);
